@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarTrekNameGen", "StarTrekNameGen\StarTrekNameGen.csproj", "{D9A6CEE8-72CA-439F-BF5F-A316175F0A19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarTrekNameGenRecursive", "StarTrekNameGenRecursive\StarTrekNameGenRecursive.csproj", "{2789BF5C-E12A-48FF-A963-AACE2E0FA21E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D9A6CEE8-72CA-439F-BF5F-A316175F0A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9A6CEE8-72CA-439F-BF5F-A316175F0A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9A6CEE8-72CA-439F-BF5F-A316175F0A19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2789BF5C-E12A-48FF-A963-AACE2E0FA21E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2789BF5C-E12A-48FF-A963-AACE2E0FA21E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2789BF5C-E12A-48FF-A963-AACE2E0FA21E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2789BF5C-E12A-48FF-A963-AACE2E0FA21E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

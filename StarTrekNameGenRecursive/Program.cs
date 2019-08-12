@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace StarTrekNameGen
 {
@@ -16,7 +14,7 @@ namespace StarTrekNameGen
             //setup variables
             string[][][] VulcanMaleLetters = new string[][][]
             {
-                new string[][] 
+                new string[][]
                 {
                     new string[] { "S", "Sp", "Sk", "St", "T" },
                     new string[] { "a", "e", "i", "o", "u", "y" },
@@ -43,7 +41,7 @@ namespace StarTrekNameGen
             };
             string[][][] TalaxianMaleLetters = new string[][][]
             {
-                new string[][] 
+                new string[][]
                 {
                     new string[] { "B", "Br", "D", "J", "L", "N", "P", "T", "W" },
                     new string[] { "e", "i", "u", "a" },
@@ -133,130 +131,87 @@ namespace StarTrekNameGen
                 },
             };
 
-            while(true)
+            //get name type inputs
+            Console.WriteLine("\nVælg race:\n1: Vulcane\n2: Talaxian\n3: Klingon");
+            char raceKey = Console.ReadKey().KeyChar;
+
+            Console.WriteLine("\nVælg køn:\n1: Hankøn\n2: Hunkøn");
+            char genderKey = Console.ReadKey().KeyChar;
+
+            //find letters for the name
+            string[][][] genNameFrom;
+            if(raceKey == '1' && genderKey == '1')
             {
-                //get name type inputs
-                Console.WriteLine("\nVælg race:\n1: Vulcane\n2: Talaxian\n3: Klingon");
-                char raceKey = Console.ReadKey().KeyChar;
-
-                Console.WriteLine("\nVælg køn:\n1: Hankøn\n2: Hunkøn");
-                char genderKey = Console.ReadKey().KeyChar;
-
-                //find letters for the name
-                string[][][] genNameFrom;
-                if(raceKey == '1' && genderKey == '1')
-                {
-                    genNameFrom = VulcanMaleLetters;
-                }
-                else if(raceKey == '1' && genderKey == '2')
-                {
-                    genNameFrom = VulcanFemaleLetters;
-                }
-                else if(raceKey == '2' && genderKey == '1')
-                {
-                    genNameFrom = TalaxianMaleLetters;
-                }
-                else if(raceKey == '2' && genderKey == '2')
-                {
-                    genNameFrom = TalaxianFemaleLetters;
-                }
-                else if(raceKey == '3' && genderKey == '1')
-                {
-                    genNameFrom = KlingonsMaleLetters;
-                }
-                else if(raceKey == '3' && genderKey == '2')
-                {
-                    genNameFrom = KlingonsMaleLetters;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Ugyldigt input!");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    continue;
-                }
-
-                //generate names
-                Console.WriteLine("--------------------------------");
-                Console.ForegroundColor = ConsoleColor.Green;
-                List<string> names = new List<string>();
-                for(int i = 0; i < genNameFrom.Length; i++)
-                {
-                    string[][] nameSyntax = genNameFrom[i];
-                    string name = string.Empty;
-                    int[] indexes = new int[nameSyntax.Length];
-                    int letterNumber = 0;
-                    bool done = false;
-                    while(true)
-                    {
-                        name += nameSyntax[letterNumber][indexes[letterNumber]];
-                        letterNumber++;
-                        if(letterNumber >= nameSyntax.Length)
-                        {
-                            //when name is done. Get ready for next name
-                            names.Add(name);
-                            name = string.Empty;
-                            letterNumber = 0;
-                            int changeIndex = 0;
-                            while(true)
-                            {
-                                //add one to an index to get the next possible name
-                                indexes[changeIndex]++;
-                                if(indexes[changeIndex] >= nameSyntax[changeIndex].Length)
-                                {
-                                    indexes[changeIndex] = 0;
-                                    changeIndex++;
-                                    if(changeIndex >= nameSyntax.Length)
-                                    {
-                                        done = true;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                        if(done)
-                        {
-                            break;
-                        }
-                    }
-                }
-                Console.WriteLine("Sorting " + names.Count + " names...");
-                names.Sort();
-
-                //write names
-                foreach(string name in names)
-                {
-                    Console.WriteLine(name);
-                }
-
+                genNameFrom = VulcanMaleLetters;
+            }
+            else if(raceKey == '1' && genderKey == '2')
+            {
+                genNameFrom = VulcanFemaleLetters;
+            }
+            else if(raceKey == '2' && genderKey == '1')
+            {
+                genNameFrom = TalaxianMaleLetters;
+            }
+            else if(raceKey == '2' && genderKey == '2')
+            {
+                genNameFrom = TalaxianFemaleLetters;
+            }
+            else if(raceKey == '3' && genderKey == '1')
+            {
+                genNameFrom = KlingonsMaleLetters;
+            }
+            else if(raceKey == '3' && genderKey == '2')
+            {
+                genNameFrom = KlingonsMaleLetters;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ugyldigt input!");
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine(names.Count + " names!");
-                Console.WriteLine("--------------------------------");
+                genNameFrom = null;
+                Main(Array.Empty<string>());
+            }
 
-                //print document
-                PrintPreviewDialog dialog = new PrintPreviewDialog();
-                dialog.Document = new PrintDocument();
-                string namesString = string.Join(" ", names);
-                Font font = new Font("arial", 12);
-                dialog.Document.PrintPage += delegate (object sender, PrintPageEventArgs e)
+            //generate names
+            Console.WriteLine("--------------------------------");
+            Console.ForegroundColor = ConsoleColor.Green;
+            List<string> names = new List<string>();
+
+            GetNameTypes(ref names, genNameFrom, 0);
+            Console.WriteLine("Sorting " + names.Count + " names...");
+            names.Sort();
+
+            //write names
+            Console.WriteLine(string.Join("\n", names));
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(names.Count + " names!");
+            Console.WriteLine("--------------------------------");
+            Main(Array.Empty<string>());
+        }
+
+        static void CreateNames(ref List<string> madeNames, string[][] nameLetters, int letter, string name)
+        {
+            if(letter >= nameLetters.Length)
+            {
+                madeNames.Add(name);
+            }
+            else
+            {
+                for(int i = 0; i < nameLetters[letter].Length; i++)
                 {
-                    e.Graphics.MeasureString(namesString.Substring(0,Math.Min(namesString.Length,10000)), font, e.PageBounds.Size, StringFormat.GenericDefault, out int maxChars, out int lines);
+                    CreateNames(ref madeNames, nameLetters, letter + 1, name + nameLetters[letter][i]);
+                }
+            }
+        }
 
-                    string write = namesString.Substring(0, maxChars);
-                    namesString = namesString.Substring(maxChars);
-                    e.Graphics.DrawString(write, font, new SolidBrush(Color.Black), new Rectangle(0, 0, e.PageBounds.Width, e.PageBounds.Height));
-                    e.HasMorePages = namesString.Length > 0;
-                };
-                dialog.ShowDialog();
-
-                PrintDialog print = new PrintDialog();
-                namesString = string.Join(" ", names);
-                print.Document = dialog.Document;
-                print.ShowDialog();
+        static void GetNameTypes(ref List<string> madeNames, string[][][] getNamesFrom,int index)
+        {
+            if(index < getNamesFrom.Length)
+            {
+                CreateNames(ref madeNames, getNamesFrom[index], 0, "");
+                GetNameTypes(ref madeNames, getNamesFrom, index + 1);
             }
         }
     }
