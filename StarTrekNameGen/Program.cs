@@ -194,12 +194,14 @@ namespace StarTrekNameGen
                         letterNumber++;
                         if(letterNumber >= nameSyntax.Length)
                         {
+                            //when name is done. Get ready for next name
                             names.Add(name);
                             name = string.Empty;
                             letterNumber = 0;
                             int changeIndex = 0;
                             while(true)
                             {
+                                //add one to an index to get the next possible name
                                 indexes[changeIndex]++;
                                 if(indexes[changeIndex] >= nameSyntax[changeIndex].Length)
                                 {
@@ -233,8 +235,28 @@ namespace StarTrekNameGen
                 }
 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("generated " + names.Count + " names!");
+                Console.WriteLine(names.Count + " names!");
                 Console.WriteLine("--------------------------------");
+
+                //print document
+                PrintPreviewDialog dialog = new PrintPreviewDialog();
+                dialog.Document = new PrintDocument();
+                string namesString = string.Join(" ", names);
+                Font font = new Font("arial", 12);
+                dialog.Document.PrintPage += delegate (object sender, PrintPageEventArgs e)
+                {
+                    e.Graphics.MeasureString(namesString.Substring(0,Math.Min(namesString.Length,10000)), font, e.PageBounds.Size, StringFormat.GenericDefault, out int maxChars, out int lines);
+
+                    string write = namesString.Substring(0, maxChars);
+                    namesString = namesString.Substring(maxChars);
+                    e.Graphics.DrawString(write, font, new SolidBrush(Color.Black), new Rectangle(0, 0, e.PageBounds.Width, e.PageBounds.Height));
+                    e.HasMorePages = namesString.Length > 0;
+                };
+                dialog.ShowDialog();
+
+                PrintDialog print = new PrintDialog();
+                print.Document = dialog.Document;
+                print.ShowDialog();
             }
         }
     }
