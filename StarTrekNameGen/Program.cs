@@ -76,18 +76,21 @@ namespace StarTrekNameGen
                 }
 
                 //generate names
+                Console.WriteLine("--------------------------------");
+                Console.ForegroundColor = ConsoleColor.Green;
                 for(int i = 0; i < number; i++)
                 {
                     string[][] nameSyntax = genNameFrom[random.Next(0, genNameFrom.Length)];
                     string name = string.Empty;
                     for(int j = 0; j < nameSyntax.Length; j++)
                     {
-                        for(int k = 0; k < nameSyntax[j].Length; k++)
-                        {
-
-                        }
+                        name += nameSyntax[j][random.Next(0, nameSyntax[j].Length)];
                     }
+
+                    Console.WriteLine(name);
                 }
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("--------------------------------");
             }
         }
     }
