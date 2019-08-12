@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace StarTrekNameGen
 {
@@ -174,33 +177,63 @@ namespace StarTrekNameGen
                     continue;
                 }
 
-                //chose an amount of names to print
-                Console.WriteLine("\nVælg antal:");
-                if(!int.TryParse(Console.ReadLine(), out int number) || number == 0)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Ugyldigt input!");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    continue;
-                }
-
                 //generate names
                 Console.WriteLine("--------------------------------");
                 Console.ForegroundColor = ConsoleColor.Green;
-
-                for(int i = 0; i < number; i++)
+                List<string> names = new List<string>();
+                for(int i = 0; i < genNameFrom.Length; i++)
                 {
-                    string[][] nameSyntax = genNameFrom[random.Next(0, genNameFrom.Length)];
+                    string[][] nameSyntax = genNameFrom[i];
                     string name = string.Empty;
-                    for(int j = 0; j < nameSyntax.Length; j++)
+                    int[] indexes = new int[nameSyntax.Length];
+                    int letterNumber = 0;
+                    bool done = false;
+                    while(true)
                     {
-                        name += nameSyntax[j][random.Next(0, nameSyntax[j].Length)];
+                        name += nameSyntax[letterNumber][indexes[letterNumber]];
+                        letterNumber++;
+                        if(letterNumber >= nameSyntax.Length)
+                        {
+                            names.Add(name);
+                            name = string.Empty;
+                            letterNumber = 0;
+                            int changeIndex = 0;
+                            while(true)
+                            {
+                                indexes[changeIndex]++;
+                                if(indexes[changeIndex] >= nameSyntax[changeIndex].Length)
+                                {
+                                    indexes[changeIndex] = 0;
+                                    changeIndex++;
+                                    if(changeIndex >= nameSyntax.Length)
+                                    {
+                                        done = true;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        if(done)
+                        {
+                            break;
+                        }
                     }
+                }
+                Console.WriteLine("Sorting " + names.Count + " names...");
+                names.Sort();
 
+                //write names
+                foreach(string name in names)
+                {
                     Console.WriteLine(name);
                 }
 
                 Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("generated " + names.Count + " names!");
                 Console.WriteLine("--------------------------------");
             }
         }
