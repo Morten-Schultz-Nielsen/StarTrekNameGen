@@ -133,57 +133,61 @@ namespace StarTrekNameGen
 
             while(true)
             {
-                //get input and parse it
-                Console.WriteLine("Skriv først hvilken type navn og derefter antalet af navne");
-                Console.WriteLine("Vulcane Male: VM");
-                Console.WriteLine("Vulcane Female: VF");
-                Console.WriteLine("Talaxian Male: TM");
-                Console.WriteLine("Talaxian Female: TF");
-                Console.WriteLine("Klingon Male: KM");
-                Console.WriteLine("Klingon Female: KF");
-                Console.WriteLine("Eksempel: VM100 ");
-                string input = Console.ReadLine();
-                if(input.Length < 3)
+                //get name type inputs
+                Console.WriteLine("\nVælg race:\n1: Vulcane\n2: Talaxian\n3: Klingon");
+                char raceKey = Console.ReadKey().KeyChar;
+
+                Console.WriteLine("\nVælg køn:\n1: Hankøn\n2: Hunkøn");
+                char genderKey = Console.ReadKey().KeyChar;
+
+                //find letters for the name
+                string[][][] genNameFrom;
+                if(raceKey == '1' && genderKey == '1')
                 {
-                    Console.WriteLine("Ugyldigt input!");
-                    continue;
+                    genNameFrom = VulcanMaleLetters;
                 }
-                string nameType = input.Substring(0,2);
-                if(!int.TryParse(input.Substring(2), out int number) || number == 0) //parse the number of names to get
+                else if(raceKey == '1' && genderKey == '2')
                 {
+                    genNameFrom = VulcanFemaleLetters;
+                }
+                else if(raceKey == '2' && genderKey == '1')
+                {
+                    genNameFrom = TalaxianMaleLetters;
+                }
+                else if(raceKey == '2' && genderKey == '2')
+                {
+                    genNameFrom = TalaxianFemaleLetters;
+                }
+                else if(raceKey == '3' && genderKey == '1')
+                {
+                    genNameFrom = KlingonsMaleLetters;
+                }
+                else if(raceKey == '3' && genderKey == '2')
+                {
+                    genNameFrom = KlingonsMaleLetters;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Ugyldigt input!");
+                    Console.ForegroundColor = ConsoleColor.White;
                     continue;
                 }
 
-                string[][][] genNameFrom;
-                switch(nameType) //parse the name type
+                //chose an amount of names to print
+                Console.WriteLine("\nVælg antal:");
+                if(!int.TryParse(Console.ReadLine(), out int number) || number == 0)
                 {
-                    case "VM":
-                        genNameFrom = VulcanMaleLetters;
-                        break;
-                    case "VF":
-                        genNameFrom = VulcanFemaleLetters;
-                        break;
-                    case "TM":
-                        genNameFrom = TalaxianMaleLetters;
-                        break;
-                    case "TF":
-                        genNameFrom = TalaxianFemaleLetters;
-                        break;
-                    case "KM":
-                        genNameFrom = KlingonsMaleLetters;
-                        break;
-                    case "KF":
-                        genNameFrom = KlingonsFemaleLetters;
-                        break;
-                    default:
-                        Console.WriteLine("Ugyldigt input!");
-                        continue;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Ugyldigt input!");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    continue;
                 }
 
                 //generate names
                 Console.WriteLine("--------------------------------");
                 Console.ForegroundColor = ConsoleColor.Green;
+
                 for(int i = 0; i < number; i++)
                 {
                     string[][] nameSyntax = genNameFrom[random.Next(0, genNameFrom.Length)];
@@ -195,6 +199,7 @@ namespace StarTrekNameGen
 
                     Console.WriteLine(name);
                 }
+
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("--------------------------------");
             }
